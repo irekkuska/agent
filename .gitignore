@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+data/
+/tmp/syntelo-target-repo
+*.log
+.DS_Store
