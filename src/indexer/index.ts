@@ -45,8 +45,11 @@ export async function indexFullRepo(ragPipeline: RAGPipeline): Promise<void> {
   console.log(`Starting full repo index: ${targetUrl}`);
 
   const provider = createGitProvider('github', { token });
-  // cloneRepo signature: (url, branch, targetPath)
-  await provider.cloneRepo(targetUrl, branch, REPO_PATH);
+  if (fs.existsSync(REPO_PATH)) {
+    execSync('git pull', { cwd: REPO_PATH, stdio: 'inherit' });
+  } else {
+    await provider.cloneRepo(targetUrl, branch, REPO_PATH);
+  }
 
   const excludes = ['node_modules', 'dist', '.next', 'build', 'coverage', '__tests__'];
   const extensions = ['.ts', '.tsx', '.js', '.jsx'];

@@ -9,7 +9,7 @@ export async function postComment(issue: IssueEvent, analysis: AgentAnalysis): P
 
   const confidencePct = `${Math.round(analysis.confidence * 100)}%`;
 
-  const comment = `## 🤖 dev-hunter analysis
+  const comment = `## 🤖 agent analysis
 
 **Root cause**
 ${analysis.root_cause}
@@ -31,11 +31,11 @@ ${analysis.reasoning ?? 'N/A'}
 | ${analysis.risk} | ${confidencePct} | ${analysis.needs_human_review ? '⚠️ Yes' : '✅ No'} |
 
 ---
-*Powered by [Syntelo](https://github.com/Syntelo) dev-hunter*`;
+*Powered by [Syntelo](https://github.com/Syntelo)`;
 
-  // webhookSecret field is used by GitHubIssuesProvider as the GitHub PAT for API calls
   const provider = createIssueProvider('github', {
-    webhookSecret: process.env.GITHUB_TOKEN!,
+    webhookSecret: process.env.GITHUB_WEBHOOK_SECRET!,
+    token: process.env.GITHUB_TOKEN!,
   });
 
   await provider.postComment(issue.id, issue.repoName, comment);

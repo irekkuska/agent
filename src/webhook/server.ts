@@ -21,8 +21,7 @@ app.post('/webhook/issue', async (req, res) => {
     const rawBody = req.body.toString();
     const signature = req.headers['x-hub-signature-256'] as string;
 
-    // webhookSecret is used by the implementation as the GitHub PAT for API calls
-    const provider = createIssueProvider('github', { webhookSecret: GITHUB_TOKEN });
+    const provider = createIssueProvider('github', { webhookSecret: WEBHOOK_SECRET, token: GITHUB_TOKEN });
 
     const valid = provider.verifyWebhookSignature(rawBody, signature, WEBHOOK_SECRET);
     if (!valid) {
@@ -52,7 +51,7 @@ app.post('/webhook/push', async (req, res) => {
     const rawBody = req.body.toString();
     const signature = req.headers['x-hub-signature-256'] as string;
 
-    const provider = createIssueProvider('github', { webhookSecret: GITHUB_TOKEN });
+    const provider = createIssueProvider('github', { webhookSecret: WEBHOOK_SECRET, token: GITHUB_TOKEN });
 
     const valid = provider.verifyWebhookSignature(rawBody, signature, WEBHOOK_SECRET);
     if (!valid) {
